@@ -1,0 +1,23 @@
+{
+  "name": "me-api-playground",
+  "version": "1.0.0",
+  "description": "A Playground to manage your profile",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "cd server && nodemon index.js",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Coderofcoders70/Me-API-Playground/issues"
+  },
+  "homepage": "https://github.com/Coderofcoders70/Me-API-Playground#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
