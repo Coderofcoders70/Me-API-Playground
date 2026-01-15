@@ -8,13 +8,15 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editData, setEditData] = useState({ name: '', email: '', education: '' });
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   // Function to fetch data from our Backend
   const fetchProfile = async (skill = '') => {
     setLoading(true);
     try {
       const url = skill
-        ? `http://localhost:5000/api/profile/search?skill=${skill}`
-        : `http://localhost:5000/api/profile`;
+        ? `${API_URL}/api/profile/search?skill=${skill}`
+        : `${API_URL}/api/profile`;
 
       const res = await fetch(url);
       const data = await res.json();
@@ -30,7 +32,7 @@ function App() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/profile', {
+      const res = await fetch(`${API_URL}/api/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(editData),
@@ -140,6 +142,8 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl">
