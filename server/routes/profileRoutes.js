@@ -21,8 +21,8 @@ router.get('/projects', async (req, res) => {
 
     if (skill) {
       const searchSkill = skill.toLowerCase();
-      projects = projects.filter(p => 
-        p.description.toLowerCase().includes(searchSkill) || 
+      projects = projects.filter(p =>
+        p.description.toLowerCase().includes(searchSkill) ||
         p.title.toLowerCase().includes(searchSkill)
       );
     }
@@ -36,10 +36,19 @@ router.get('/projects', async (req, res) => {
 // update Profile 
 router.put('/', async (req, res) => {
   try {
-    const updatedProfile = await Profile.findOneAndUpdate({}, req.body, { new: true });
+    const updatedProfile = await Profile.findOneAndUpdate(
+      {},
+      { $set: req.body },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProfile) {
+      return res.status(404).json({ message: "Profile not found to update" });
+    }
+
     res.json(updatedProfile);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ message: "Update failed: " + err.message });
   }
 });
 

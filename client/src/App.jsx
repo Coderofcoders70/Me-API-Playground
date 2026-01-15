@@ -5,6 +5,9 @@ function App() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editData, setEditData] = useState({ name: '', email: '', education: '' });
+
   // Function to fetch data from our Backend
   const fetchProfile = async (skill = '') => {
     setLoading(true);
@@ -16,10 +19,28 @@ function App() {
       const res = await fetch(url);
       const data = await res.json();
       setProfile(data);
+      setEditData({ name: data.name, email: data.email, education: data.education });
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:5000/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editData),
+      });
+      if (res.ok) {
+        setIsModalOpen(false);
+        fetchProfile(); // Refresh data
+      }
+    } catch (err) {
+      console.error("Update failed:", err);
     }
   };
 
@@ -40,7 +61,14 @@ function App() {
 
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8 border border-slate-200">
-          <div className="bg-blue-600 h-32 w-full"></div>
+          <div className="bg-blue-600 h-32 w-full">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg backdrop-blur-md transition-all text-sm font-bold"
+            >
+              Edit Profile
+            </button>
+          </div>
           <div className="px-8 pb-8">
             <div className="relative -mt-12 mb-4">
               <div className="h-24 w-24 bg-white rounded-full border-4 border-white shadow-lg flex items-center justify-center text-3xl font-bold text-blue-600">
@@ -112,6 +140,46 @@ function App() {
           )}
         </div>
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl">
+            <h2 className="text-2xl font-bold mb-6">Edit Profile Info</h2>
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-bold mb-1">Name</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded-lg"
+                  value={editData.name}
+                  onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1">Email</label>
+                <input
+                  type="email"
+                  className="w-full border p-2 rounded-lg"
+                  value={editData.email}
+                  onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-1">Education</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded-lg"
+                  value={editData.education}
+                  onChange={(e) => setEditData({ ...editData, education: e.target.value })}
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <button type="submit" className="flex-1 bg-blue-600 text-white py-2 rounded-lg font-bold">Save Changes</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 bg-slate-100 text-slate-600 py-2 rounded-lg font-bold">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
