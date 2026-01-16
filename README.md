@@ -37,7 +37,7 @@ A professional "Profile-as-a-Service" application built to demonstrate full-stac
 ### 1. Health Check
 `GET /health`
 - **Purpose:** Verify server status.
-- **Sample:** `curl [Backend-URL]/health`
+- **Sample:** `curl https://me-api-playground-zj2a.onrender.com/health`
 
 ### 2. Search by Skill
 `GET /api/profile/search?skill=python`
