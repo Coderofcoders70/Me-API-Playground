@@ -2,8 +2,8 @@
 
 A professional "Profile-as-a-Service" application built to demonstrate full-stack proficiency. This project features a MERN-based API that stores personal information and a responsive React frontend for querying and updating data.
 
-## Live Links
-- **Link:** https://me-api-playground-nine-pi.vercel.app
+## Live Link
+- **Click Here:** https://me-api-playground-nine-pi.vercel.app
 
 ---
 
